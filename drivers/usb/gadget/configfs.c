@@ -111,8 +111,6 @@ struct gadget_info {
 	struct work_struct work;
 	struct device *dev;
 #endif
-	spinlock_t spinlock;
-	bool unbind;
 };
 
 static inline struct gadget_info *to_gadget_info(struct config_item *item)
