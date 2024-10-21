@@ -309,6 +309,10 @@ int bpf_check(struct bpf_prog **fp, union bpf_attr *attr);
 
 struct bpf_prog *bpf_prog_get_type_path(const char *name, enum bpf_prog_type type);
 
+static inline bool unprivileged_ebpf_enabled(void)
+{
+	return !sysctl_unprivileged_bpf_disabled;
+}
 #else
 static inline void bpf_register_prog_type(struct bpf_prog_type_list *tl)
 {
@@ -336,7 +340,6 @@ static inline struct bpf_prog *bpf_prog_inc(struct bpf_prog *prog)
 {
 	return ERR_PTR(-EOPNOTSUPP);
 }
-static inline int bpf_obj_get_user(const char __user *pathname)
 {
 	return -EOPNOTSUPP;
 }
@@ -346,9 +349,13 @@ static inline struct bpf_prog *bpf_prog_get_type_path(const char *name,
 {
 	return ERR_PTR(-EOPNOTSUPP);
 }
+
+{
+	return false;
+}
+
 #endif /* CONFIG_BPF_SYSCALL */
 
-/* verifier prototypes for helper functions called from eBPF programs */
 extern const struct bpf_func_proto bpf_map_lookup_elem_proto;
 extern const struct bpf_func_proto bpf_map_update_elem_proto;
 extern const struct bpf_func_proto bpf_map_delete_elem_proto;
