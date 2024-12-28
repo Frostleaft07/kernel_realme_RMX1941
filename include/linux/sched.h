@@ -922,6 +922,10 @@ struct user_struct {
 #if defined(CONFIG_PERF_EVENTS) || defined(CONFIG_BPF_SYSCALL)
 	atomic_long_t locked_vm;
 #endif
+
+#ifdef CONFIG_KSU_SUSFS
+	u64 android_kabi_reserved2;
+#endif
 };
 
 extern int uids_sysfs_init(void);
@@ -2335,7 +2339,9 @@ struct task_struct {
 	/* A live task holds one reference. */
 	atomic_t stack_refcount;
 #endif
-
+#ifdef CONFIG_KSU_SUSFS
+	u64 android_kabi_reserved8;
+#endif
 #ifdef CONFIG_PREEMPT_MONITOR
 	unsigned long preempt_dur;
 #endif
